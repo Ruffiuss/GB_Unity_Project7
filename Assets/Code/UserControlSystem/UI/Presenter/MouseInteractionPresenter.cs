@@ -12,6 +12,8 @@ namespace UserControlSystem.UI.Presenter
         [SerializeField] private Camera _camera;
         [SerializeField] private SelectableValue _selectedObject;
 
+        private IUnitProducer _unitProducer;
+
         #endregion
 
         #region UnityMethods
@@ -25,12 +27,17 @@ namespace UserControlSystem.UI.Presenter
             var hits = Physics.RaycastAll(_camera.ScreenPointToRay(Input.mousePosition));
             if (hits.Length == 0)
             {
+                _unitProducer = null;
                 return;
             }
-            var selectable = hits
-                .Select(hit => hit.collider.GetComponentInParent<ISelectable>())
+            _selectedObject.SetValue(
+                hits.Select(
+                    hit => hit.collider.GetComponentInParent<ISelectable>())
+                    .FirstOrDefault(c => c != null));
+            _unitProducer = hits.Select(
+                hit => hit.collider.GetComponentInParent<IUnitProducer>())
                 .FirstOrDefault(c => c != null);
-            _selectedObject.SetValue(selectable);
+            _unitProducer?.ProduceUnit();
         }
 
         #endregion

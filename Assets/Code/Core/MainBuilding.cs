@@ -29,7 +29,7 @@ namespace Core
 
         public void ProduceUnit()
         {
-            Instantiate(_unitPrefab, new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10)), Quaternion.identity, _unitsParent);
+            Instantiate(_unitPrefab, new Vector3(Random.Range(-5, 35), 0, Random.Range(-5, 25)), Quaternion.identity, _unitsParent);
         }
 
         #endregion
