@@ -13,6 +13,7 @@ namespace UserControlSystem.UI.Presenter
         [SerializeField] private SelectableValue _selectedObject;
 
         private IUnitProducer _unitProducer;
+        private ISelectable _lastSelected;
 
         #endregion
 
@@ -27,13 +28,24 @@ namespace UserControlSystem.UI.Presenter
             var hits = Physics.RaycastAll(_camera.ScreenPointToRay(Input.mousePosition));
             if (hits.Length == 0)
             {
+                _lastSelected.SetSelected(false);
                 _unitProducer = null;
                 return;
             }
-            _selectedObject.SetValue(
-                hits.Select(
+            var lastHit = hits.Select(
                     hit => hit.collider.GetComponentInParent<ISelectable>())
-                    .FirstOrDefault(c => c != null));
+                    .FirstOrDefault(c => c != null);
+            if (lastHit != null)
+            {
+                _lastSelected = lastHit;
+                _lastSelected.SetSelected(true);
+            }
+            else
+                _lastSelected.SetSelected(false);
+
+            _selectedObject.SetValue(lastHit);
+                
+
             _unitProducer = hits.Select(
                 hit => hit.collider.GetComponentInParent<IUnitProducer>())
                 .FirstOrDefault(c => c != null);
