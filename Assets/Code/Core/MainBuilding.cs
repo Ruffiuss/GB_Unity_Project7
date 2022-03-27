@@ -1,13 +1,13 @@
 using Abstractions;
+using Abstractions.Commands;
 using UnityEngine;
 
 namespace Core
 {
-    public sealed class MainBuilding : MonoBehaviour, IUnitProducer, ISelectable
+    public sealed class MainBuilding : CommandExecutorBase<IProduceUnitCommand>, ISelectable
     {
         #region Fields
 
-        [SerializeField] private GameObject _unitPrefab;
         [SerializeField] private Transform _unitsParent;
         [SerializeField] private Sprite _icon;
         [SerializeField] private SpriteRenderer _selector;
@@ -29,10 +29,11 @@ namespace Core
 
         #region Methods
 
-        public void ProduceUnit()
-        {
-            Instantiate(_unitPrefab, new Vector3(Random.Range(-5, 35), 0, Random.Range(-5, 25)), Quaternion.identity, _unitsParent);
-        }
+        public override void ExecuteSpecificCommand(IProduceUnitCommand command)
+            => Instantiate(command.UnitPrefab,
+                new Vector3(Random.Range(-5, 35), 0, Random.Range(-5, 25)),
+                Quaternion.identity,
+                _unitsParent);
 
         public void SetSelected(bool isSelected)
         {
