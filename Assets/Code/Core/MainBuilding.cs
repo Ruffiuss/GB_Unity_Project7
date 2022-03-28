@@ -27,18 +27,6 @@ namespace Core
 
         #endregion
 
-        #region UnityMethods
-
-        private void Update()
-        {
-            if (_isSelected)
-                _selector.enabled = true;
-            else
-                _selector.enabled = false;
-        }
-
-        #endregion
-
         #region Methods
 
         public void ProduceUnit()
@@ -49,7 +37,10 @@ namespace Core
         public void SetSelected(bool isSelected)
         {
             if (_isSelected != isSelected)
+            {
                 _isSelected = isSelected;
+                _selector.enabled = _isSelected;
+            }
         }
 
         #endregion

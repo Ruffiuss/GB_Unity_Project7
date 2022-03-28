@@ -1,4 +1,5 @@
 using Abstractions;
+using System;
 using System.Linq;
 using UnityEngine;
 using UserControlSystem.UI.Model;
@@ -12,12 +13,24 @@ namespace UserControlSystem.UI.Presenter
         [SerializeField] private Camera _camera;
         [SerializeField] private SelectableValue _selectedObject;
 
+        private SelectablePresenter _selectablePresenter;
         private IUnitProducer _unitProducer;
-        private ISelectable _lastSelected;
+
+        #endregion
+
+        #region Properties
+
+        private Action<ISelectable> _onChageSelection;
 
         #endregion
 
         #region UnityMethods
+
+        private void Awake()
+        {
+            _selectablePresenter = new SelectablePresenter(_selectedObject);
+            _onChageSelection += _selectablePresenter.ChangeSelected;
+        }
 
         private void Update()
         {
@@ -28,7 +41,7 @@ namespace UserControlSystem.UI.Presenter
             var hits = Physics.RaycastAll(_camera.ScreenPointToRay(Input.mousePosition));
             if (hits.Length == 0)
             {
-                _lastSelected.SetSelected(false);
+                _onChageSelection.Invoke(null);
                 _unitProducer = null;
                 return;
             }
@@ -37,19 +50,22 @@ namespace UserControlSystem.UI.Presenter
                     .FirstOrDefault(c => c != null);
             if (lastHit != null)
             {
-                _lastSelected = lastHit;
-                _lastSelected.SetSelected(true);
+                _onChageSelection.Invoke(lastHit);
             }
             else
-                _lastSelected.SetSelected(false);
+                _onChageSelection.Invoke(null);
 
-            _selectedObject.SetValue(lastHit);
-                
 
             _unitProducer = hits.Select(
                 hit => hit.collider.GetComponentInParent<IUnitProducer>())
                 .FirstOrDefault(c => c != null);
             _unitProducer?.ProduceUnit();
+        }
+
+        private void OnDestroy()
+        {
+            _onChageSelection -= _selectablePresenter.ChangeSelected;
+            _selectablePresenter = null;
         }
 
         #endregion
