@@ -55,14 +55,27 @@ namespace UserControlSystem.UI.Presenter
 
         private void OnButtonClick(ICommandExecutor commandExecutor)
         {
-            var unitProducer = commandExecutor as CommandExecutorBase<IProduceUnitCommand>;
-            if (unitProducer != null)
+            switch (commandExecutor)
             {
-                unitProducer.ExecuteSpecificCommand(_context.Inject(new ProduceUnitCommand()));
-                return;
-            }
-            throw new ApplicationException($"{nameof(CommandButtonsPresenter)}.{nameof(OnButtonClick)}: "
+                case CommandExecutorBase<IAttackCommand> attack:
+                    attack.ExecuteSpecificCommand(_context.Inject(new AttackCommand()));
+                    break;
+                case CommandExecutorBase<IMoveCommand> move:
+                    move.ExecuteSpecificCommand(_context.Inject(new MoveCommand()));
+                    break;
+                case CommandExecutorBase<IPatrolCommand> patrol:
+                    patrol.ExecuteSpecificCommand(_context.Inject(new PatrolCommand()));
+                    break;
+                case CommandExecutorBase<IProduceUnitCommand> produce:
+                    produce.ExecuteSpecificCommand(_context.Inject(new ProduceUnitCommand()));
+                    break;
+                case CommandExecutorBase<IStopCommand> stop:
+                    stop.ExecuteSpecificCommand(_context.Inject(new StopCommand()));
+                    break;
+                default:
+                    throw new ApplicationException($"{nameof(CommandButtonsPresenter)}.{nameof(OnButtonClick)}: "
                 + $"Unknown type of commands executor: {commandExecutor.GetType().FullName}!");
+            }
         }
 
         #endregion
