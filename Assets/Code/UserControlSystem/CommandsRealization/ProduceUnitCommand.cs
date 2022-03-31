@@ -14,7 +14,7 @@ namespace UserControlSystem.CommandsRealization
 
         #region Properties
 
-       public GameObject UnitPrefab => _unitPrefab;
+        public GameObject UnitPrefab => _unitPrefab;
 
         #endregion
     }

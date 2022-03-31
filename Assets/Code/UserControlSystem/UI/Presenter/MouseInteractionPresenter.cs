@@ -55,11 +55,7 @@ namespace UserControlSystem.UI.Presenter
             else
                 _onChageSelection.Invoke(null);
 
-
-            _unitProducer = hits.Select(
-                hit => hit.collider.GetComponentInParent<IUnitProducer>())
-                .FirstOrDefault(c => c != null);
-            _unitProducer?.ProduceUnit();
+            _selectedObject.SetValue(lastHit);
         }
 
         private void OnDestroy()
