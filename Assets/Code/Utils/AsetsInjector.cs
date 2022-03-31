@@ -26,7 +26,7 @@ namespace Utils
             for (int i = 0; i < allFields.Length; i++)
             {
                 var fieldInfo = allFields[i];
-                var injectAssetAttribute = fieldInfo.GetCustomAttributes(_injectAssetAttributeType) as InjectAssetAttribute;
+                var injectAssetAttribute = fieldInfo.GetCustomAttribute(_injectAssetAttributeType) as InjectAssetAttribute;
                 if (injectAssetAttribute == null)
                 {
                     continue;

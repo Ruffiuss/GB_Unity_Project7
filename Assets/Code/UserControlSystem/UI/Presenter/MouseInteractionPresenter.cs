@@ -14,7 +14,6 @@ namespace UserControlSystem.UI.Presenter
         [SerializeField] private SelectableValue _selectedObject;
 
         private SelectablePresenter _selectablePresenter;
-        private IUnitProducer _unitProducer;
 
         #endregion
 
