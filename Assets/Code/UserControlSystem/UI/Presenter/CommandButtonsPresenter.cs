@@ -67,7 +67,7 @@ namespace UserControlSystem.UI.Presenter
                     patrol.ExecuteSpecificCommand(_context.Inject(new PatrolCommand()));
                     break;
                 case CommandExecutorBase<IProduceUnitCommand> produce:
-                    produce.ExecuteSpecificCommand(_context.Inject(new ProduceUnitCommand()));
+                    produce.ExecuteSpecificCommand(_context.Inject(new ProduceUnitCommandHeir()));
                     break;
                 case CommandExecutorBase<IStopCommand> stop:
                     stop.ExecuteSpecificCommand(_context.Inject(new StopCommand()));
