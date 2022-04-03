@@ -1,24 +1,16 @@
 ﻿using Abstractions;
+using UnityEngine;
 using UserControlSystem.UI.Model;
 
 namespace UserControlSystem.UI.Presenter
 {
-    public sealed class SelectablePresenter
+    public sealed class SelectablePresenter : MonoBehaviour
     {
         #region Fields
 
-        private SelectableValue _selectedObject;
+        [SerializeField] private SelectableValue _selectedObject;
 
         private ISelectable _lastSelected;
-
-        #endregion
-
-        #region ClassLifeCycles
-
-        public SelectablePresenter(SelectableValue selectableValue)
-        {
-            _selectedObject = selectableValue;
-        }
 
         #endregion
 
@@ -32,6 +24,7 @@ namespace UserControlSystem.UI.Presenter
             }
             else
             {
+                _lastSelected?.SetSelected(false);
                 _lastSelected = selected;
                 _lastSelected.SetSelected(true);
             }

@@ -2,6 +2,7 @@ using Abstractions;
 using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UserControlSystem.UI.Model;
 
 namespace UserControlSystem.UI.Presenter
@@ -11,10 +12,8 @@ namespace UserControlSystem.UI.Presenter
         #region Fields
 
         [SerializeField] private Camera _camera;
-        [SerializeField] private SelectableValue _selectedObject;
-
-        private SelectablePresenter _selectablePresenter;
-        private IUnitProducer _unitProducer;
+        [SerializeField] private EventSystem _eventSystem;
+        [SerializeField] private SelectablePresenter _selectablePresenter;
 
         #endregion
 
@@ -28,7 +27,6 @@ namespace UserControlSystem.UI.Presenter
 
         private void Awake()
         {
-            _selectablePresenter = new SelectablePresenter(_selectedObject);
             _onChageSelection += _selectablePresenter.ChangeSelected;
         }
 
@@ -38,28 +36,19 @@ namespace UserControlSystem.UI.Presenter
             {
                 return;
             }
+            if (_eventSystem.IsPointerOverGameObject())
+                return;
+
             var hits = Physics.RaycastAll(_camera.ScreenPointToRay(Input.mousePosition));
             if (hits.Length == 0)
             {
                 _onChageSelection.Invoke(null);
-                _unitProducer = null;
                 return;
             }
             var lastHit = hits.Select(
                     hit => hit.collider.GetComponentInParent<ISelectable>())
                     .FirstOrDefault(c => c != null);
-            if (lastHit != null)
-            {
-                _onChageSelection.Invoke(lastHit);
-            }
-            else
-                _onChageSelection.Invoke(null);
-
-
-            _unitProducer = hits.Select(
-                hit => hit.collider.GetComponentInParent<IUnitProducer>())
-                .FirstOrDefault(c => c != null);
-            _unitProducer?.ProduceUnit();
+            _onChageSelection.Invoke(lastHit);
         }
 
         private void OnDestroy()
