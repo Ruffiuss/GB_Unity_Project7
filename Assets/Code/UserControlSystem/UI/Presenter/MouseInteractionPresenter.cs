@@ -14,6 +14,10 @@ namespace UserControlSystem.UI.Presenter
         [SerializeField] private Camera _camera;
         [SerializeField] private EventSystem _eventSystem;
         [SerializeField] private SelectablePresenter _selectablePresenter;
+        [SerializeField] private Vector3Value _groundClicksRMB;
+        [SerializeField] private Transform _groundTransform;
+
+        private Plane _groundPlane;
 
         #endregion
 
@@ -28,14 +32,13 @@ namespace UserControlSystem.UI.Presenter
         private void Awake()
         {
             _onChageSelection += _selectablePresenter.ChangeSelected;
+            _groundPlane = new Plane(_groundTransform.up, 0);
         }
 
         private void Update()
         {
-            if (!Input.GetMouseButtonUp(0))
-            {
+            if (!Input.GetMouseButtonUp(0) && !Input.GetMouseButton(1))
                 return;
-            }
             if (_eventSystem.IsPointerOverGameObject())
                 return;
 
@@ -45,6 +48,13 @@ namespace UserControlSystem.UI.Presenter
                 _onChageSelection.Invoke(null);
                 return;
             }
+
+            var ray = _camera.ScreenPointToRay(Input.mousePosition);
+            if (_groundPlane.Raycast(ray, out var enter))
+            {
+                _groundClicksRMB.SetValue(ray.origin + ray.direction * enter);
+            }
+
             var lastHit = hits.Select(
                     hit => hit.collider.GetComponentInParent<ISelectable>())
                     .FirstOrDefault(c => c != null);
