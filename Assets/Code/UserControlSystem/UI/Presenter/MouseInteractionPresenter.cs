@@ -12,10 +12,11 @@ namespace UserControlSystem.UI.Presenter
         #region Fields
 
         [SerializeField] private Camera _camera;
+        [SerializeField] private Transform _groundTransform;
         [SerializeField] private EventSystem _eventSystem;
         [SerializeField] private SelectablePresenter _selectablePresenter;
         [SerializeField] private Vector3Value _groundClicksRMB;
-        [SerializeField] private Transform _groundTransform;
+        [SerializeField] private AttackableValue _attackablesRMB;
 
         private Plane _groundPlane;
 
@@ -43,28 +44,51 @@ namespace UserControlSystem.UI.Presenter
                 return;
 
             var hits = Physics.RaycastAll(_camera.ScreenPointToRay(Input.mousePosition));
+            var ray = _camera.ScreenPointToRay(Input.mousePosition);
+
             if (hits.Length == 0)
             {
                 _onChageSelection.Invoke(null);
                 return;
             }
 
-            var ray = _camera.ScreenPointToRay(Input.mousePosition);
-            if (_groundPlane.Raycast(ray, out var enter))
+            if (CompareHit<ISelectable>(hits, out var selectable))
+            {
+                _onChageSelection.Invoke(selectable);
+            }
+
+            if (CompareHit<IAttackable>(hits, out var attackable))
+            {
+                _attackablesRMB.SetValue(attackable);
+            }
+            else if (_groundPlane.Raycast(ray, out var enter))
             {
                 _groundClicksRMB.SetValue(ray.origin + ray.direction * enter);
             }
-
-            var lastHit = hits.Select(
-                    hit => hit.collider.GetComponentInParent<ISelectable>())
-                    .FirstOrDefault(c => c != null);
-            _onChageSelection.Invoke(lastHit);
         }
 
         private void OnDestroy()
         {
             _onChageSelection -= _selectablePresenter.ChangeSelected;
             _selectablePresenter = null;
+        }
+
+        #endregion
+
+        #region Methods
+
+        private bool CompareHit<T>(RaycastHit[] hits, out T result) where T : class
+        {
+            result = default;
+            if (hits.Length == 0)
+            {
+                return false;
+            }
+            result = hits
+                .Select(hit => hit.collider.GetComponentInParent<T>())
+                .Where(c => c != null)
+                .FirstOrDefault();
+            return result != default;
         }
 
         #endregion

@@ -1455,7 +1455,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _legacyContext: {fileID: 11400000, guid: cbec6ae8552c8ca4fb8f59f0f8d7fb2f, type: 2}
+  _selectableValue: {fileID: 11400000, guid: 68d86725fbcd70a48b7021e5a14e12f8, type: 2}
   _vector3Value: {fileID: 11400000, guid: a23da7cb37358404284c2b587c70c63c, type: 2}
+  _attackableValue: {fileID: 11400000, guid: 4f3ea5776837fd54c8e2db14dce4b827, type: 2}
 --- !u!1 &1201254876
 GameObject:
   m_ObjectHideFlags: 0
@@ -1671,10 +1673,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 963194227}
+  _groundTransform: {fileID: 1433617625}
   _eventSystem: {fileID: 111365432}
   _selectablePresenter: {fileID: 1244321605}
   _groundClicksRMB: {fileID: 11400000, guid: a23da7cb37358404284c2b587c70c63c, type: 2}
-  _groundTransform: {fileID: 1433617625}
+  _attackablesRMB: {fileID: 11400000, guid: 4f3ea5776837fd54c8e2db14dce4b827, type: 2}
 --- !u!4 &1244321604
 Transform:
   m_ObjectHideFlags: 0
