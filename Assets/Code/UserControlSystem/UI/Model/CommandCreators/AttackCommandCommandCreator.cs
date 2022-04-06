@@ -28,7 +28,7 @@ namespace UI.Model.CommandCreators
         [Inject]
         private void Init(AttackableValue groundCLicks)
         {
-            groundCLicks.OnNewTarget += OnNewTarget;
+            groundCLicks.OnNewValue += OnNewTarget;
         }
 
         private void OnNewTarget(IAttackable target)

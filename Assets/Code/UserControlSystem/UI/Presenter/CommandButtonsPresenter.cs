@@ -29,7 +29,7 @@ namespace UserControlSystem.UI.Presenter
             _model.OnCommandSent += _view.UnblockAllInteractions;
             _model.OnCommandCancel += _view.UnblockAllInteractions;
             _model.OnCommandAccepted += _view.BlockInteractions;
-            _selectable.OnSelected += OnSelected;
+            _selectable.OnNewValue += OnSelected;
             OnSelected(_selectable.CurrentValue);
         }
 
