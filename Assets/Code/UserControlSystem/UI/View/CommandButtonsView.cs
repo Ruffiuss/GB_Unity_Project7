@@ -48,6 +48,34 @@ namespace UserControlSystem.UI.View
 
         #region Methods
 
+        public void BlockInteractions(ICommandExecutor ce)
+        {
+            UnblockAllInteractions();
+            GetButtonGameObjectByType(ce.GetType())
+            .GetComponent<Selectable>().interactable = false;
+        }
+
+        public void UnblockAllInteractions() => SetInteractible(true);
+
+        private void SetInteractible(bool value)
+        {
+            _attackButton.GetComponent<Selectable>().interactable = value;
+            _moveButton.GetComponent<Selectable>().interactable = value;
+            _patrolButton.GetComponent<Selectable>().interactable = value;
+            _stopButton.GetComponent<Selectable>().interactable = value;
+            _produceUnitButton.GetComponent<Selectable>().interactable =
+            value;
+        }
+
+        private GameObject GetButtonGameObjectByType(Type executorInstanceType)
+        {
+            return _buttonsByExecutorType
+            .Where(type =>
+            type.Key.IsAssignableFrom(executorInstanceType))
+            .First()
+            .Value;
+        }
+
         public void MakeLayout(IEnumerable<ICommandExecutor> commandExecutors)
         {
             foreach (var currentExecutor in commandExecutors)

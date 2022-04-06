@@ -2,10 +2,9 @@ using UnityEngine;
 
 namespace Abstractions
 {
-    public interface  ISelectable
+    public interface  ISelectable : IHealthable
     {
-        float Health { get; }
-        float MaxHealth { get; }
+        Transform CurrentPosition { get; }
         Sprite Icon { get; }
         void SetSelected(bool isSelected);
     }

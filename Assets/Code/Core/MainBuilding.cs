@@ -4,11 +4,12 @@ using UnityEngine;
 
 namespace Core
 {
-    public sealed class MainBuilding : CommandExecutorBase<IProduceUnitCommand>, ISelectable
+    public sealed class MainBuilding : CommandExecutorBase<IProduceUnitCommand>, ISelectable, IAttackable
     {
         #region Fields
 
-        [SerializeField] private Transform _unitsParent;
+        private Transform _unitsParent;
+        [SerializeField] private Transform _currentPosition;
         [SerializeField] private Sprite _icon;
         [SerializeField] private SpriteRenderer _selector;
 
@@ -21,6 +22,7 @@ namespace Core
 
         #region Properties
 
+        public Transform CurrentPosition => _currentPosition;
         public Sprite Icon => _icon;
         public float MaxHealth => _maxHealth;
         public float Health => _health;
@@ -31,6 +33,7 @@ namespace Core
 
         private void Awake()
         {
+            _currentPosition = transform;
             SetSelected(false);
         }
 

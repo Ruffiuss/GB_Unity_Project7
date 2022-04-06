@@ -3,10 +3,11 @@ using UnityEngine;
 
 namespace Core
 {
-    public class Unit : MonoBehaviour, ISelectable
+    public class Unit : MonoBehaviour, ISelectable, IAttackable
     {
         #region Fields
 
+        private Transform _curentPosition;
         [SerializeField] private Sprite _icon;
         [SerializeField] private SpriteRenderer _selector;
 
@@ -21,6 +22,7 @@ namespace Core
 
         public float Health => _health;
         public float MaxHealth => _maxHealth;
+        public Transform CurrentPosition => _curentPosition;
         public Sprite Icon => _icon;
 
         #endregion
@@ -30,6 +32,7 @@ namespace Core
         private void Awake()
         {
             SetSelected(false);
+            _curentPosition = transform;
         }
 
         #endregion

@@ -23,7 +23,7 @@ namespace UserControlSystem.UI.Presenter
 
         private void Start()
         {
-            _selectedValue.OnSelected += onSelected;
+            _selectedValue.OnNewValue += onSelected;
             onSelected(_selectedValue.CurrentValue);
         }
 
