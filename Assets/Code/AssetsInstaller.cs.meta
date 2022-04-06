@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a37650a6dd623ec40b930008b73b833a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _legacyContext: {fileID: 11400000, guid: cbec6ae8552c8ca4fb8f59f0f8d7fb2f, type: 2}
+  - _groundClicksRMB: {fileID: 11400000, guid: a23da7cb37358404284c2b587c70c63c, type: 2}
+  - _attackableClicksRMB: {fileID: 11400000, guid: 4f3ea5776837fd54c8e2db14dce4b827, type: 2}
+  - _selectables: {fileID: 11400000, guid: 68d86725fbcd70a48b7021e5a14e12f8, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

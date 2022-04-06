@@ -11,10 +11,10 @@ namespace UserControlSystem.UI.Model
     {
         #region Fields
 
-        [SerializeField] private AssetsContext _legacyContext;
-        [SerializeField] private SelectableValue _selectableValue;
-        [SerializeField] private Vector3Value _vector3Value;
-        [SerializeField] private AttackableValue _attackableValue;
+        [Inject] private AssetsContext _legacyContext;
+        [Inject] private SelectableValue _selectableValue;
+        [Inject] private Vector3Value _vector3Value;
+        [Inject] private AttackableValue _attackableValue;
 
         #endregion
 
