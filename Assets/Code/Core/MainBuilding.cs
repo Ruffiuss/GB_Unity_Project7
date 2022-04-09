@@ -8,7 +8,7 @@ namespace Core
     {
         #region Fields
 
-        private Transform _unitsParent;
+        [SerializeField] private Transform _unitsParent;
         [SerializeField] private Transform _currentPosition;
         [SerializeField] private Sprite _icon;
         [SerializeField] private SpriteRenderer _selector;
@@ -33,19 +33,22 @@ namespace Core
 
         private void Awake()
         {
-            _currentPosition = transform;
             SetSelected(false);
         }
 
         #endregion
 
-        #region Methods
+        #region Methods 
 
         public override void ExecuteSpecificCommand(IProduceUnitCommand command)
-            => Instantiate(command.UnitPrefab,
-                new Vector3(Random.Range(-5, 35), 1, Random.Range(-5, 25)),
+        {
+            var randomX = Random.Range(-5, 35);
+            var randomZ = Random.Range(-5, 25);
+            Instantiate(command.UnitPrefab,
+                new Vector3(randomX, 1, randomZ),
                 Quaternion.identity,
                 _unitsParent);
+        }
 
         public void SetSelected(bool isSelected)
         {
