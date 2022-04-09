@@ -5,7 +5,7 @@ using Zenject;
 
 namespace UserControlSystem.UI.Model
 {
-    public class CommandButtonsModel
+    public sealed class CommandButtonsModel
     {
         #region Fields
 

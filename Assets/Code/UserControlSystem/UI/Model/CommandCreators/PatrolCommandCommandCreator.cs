@@ -9,11 +9,10 @@ using Zenject;
 
 namespace UI.Model.CommandCreators
 {
-    public class PatrolCommandCommandCreator : CommandCreatorBase<IPatrolCommand>
+    public class PatrolCommandCommandCreator : CancellableCommandCreatorBase<IPatrolCommand, Vector3>
     {
         #region Fields
 
-        [Inject] private AssetsContext _context;
         [Inject] private SelectableValue _selectable;
 
         #endregion
@@ -26,28 +25,8 @@ namespace UI.Model.CommandCreators
 
         #region Methods
 
-        [Inject]
-        private void Init(Vector3Value groundClicks)
-        {
-            groundClicks.OnNewValue += OnNewValue;
-        }
-
-        private void OnNewValue(Vector3 groundClick)
-        {
-            _onCreated?.Invoke(_context.Inject(new PatrolCommand(_selectable.CurrentValue.CurrentPosition.position, groundClick)));
-        }
-
-        protected override void ClassSpecificCommandCreation(Action<IPatrolCommand> creationCallback)
-        {
-            _onCreated = creationCallback;
-        }
-
-        public override void ProcessCancel()
-        {
-            base.ProcessCancel();
-
-            _onCreated = null;
-        }
+        protected override IPatrolCommand CreateCommand(Vector3 argument) =>
+            new PatrolCommand(_selectable.CurrentValue.CurrentPosition.position, argument);
 
         #endregion
     }

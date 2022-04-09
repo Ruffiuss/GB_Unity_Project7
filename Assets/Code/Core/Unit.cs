@@ -7,7 +7,7 @@ namespace Core
     {
         #region Fields
 
-        private Transform _curentPosition;
+        [SerializeField] private Transform _curentPosition;
         [SerializeField] private Sprite _icon;
         [SerializeField] private SpriteRenderer _selector;
 
@@ -32,7 +32,6 @@ namespace Core
         private void Awake()
         {
             SetSelected(false);
-            _curentPosition = transform;
         }
 
         #endregion

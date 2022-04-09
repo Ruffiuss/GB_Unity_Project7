@@ -1,3 +1,4 @@
+using Abstractions;
 using UnityEngine;
 using UserControlSystem.UI.Model;
 using Utils;
@@ -20,6 +21,8 @@ public class AssetsInstaller : ScriptableObjectInstaller<AssetsInstaller>
 
     public override void InstallBindings()
     {
+        Container.Bind<IAwaitable<IAttackable>>().FromInstance(_attackableClicksRMB);
+        Container.Bind<IAwaitable<Vector3>>().FromInstance(_groundClicksRMB);
         Container.BindInstances(_legacyContext, _groundClicksRMB, _attackableClicksRMB, _selectables);
     }
 
