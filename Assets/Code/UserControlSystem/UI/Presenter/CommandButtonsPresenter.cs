@@ -1,6 +1,8 @@
 using Abstractions;
 using Abstractions.Commands;
+using System;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 using UserControlSystem.UI.Model;
 using UserControlSystem.UI.View;
@@ -12,7 +14,7 @@ namespace UserControlSystem.UI.Presenter
     {
         #region Fields
 
-        [SerializeField] private SelectableValue _selectable;
+        [Inject] private IObservable<ISelectable> _selectable;
         [SerializeField] private CommandButtonsView _view;
 
         [Inject] private CommandButtonsModel _model;
@@ -29,8 +31,7 @@ namespace UserControlSystem.UI.Presenter
             _model.OnCommandSent += _view.UnblockAllInteractions;
             _model.OnCommandCancel += _view.UnblockAllInteractions;
             _model.OnCommandAccepted += _view.BlockInteractions;
-            _selectable.OnNewValue += OnSelected;
-            OnSelected(_selectable.CurrentValue);
+            _selectable.Subscribe(OnSelected);
         }
 
         #endregion
