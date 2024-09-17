@@ -16,10 +16,10 @@ namespace UserControlSystem.UI.Model
 
         #region Methods
 
-        public void SetValue(T target)
+        public virtual void SetValue(T value)
         {
-            CurrentValue = target;
-            OnNewValue?.Invoke(target);
+            CurrentValue = value;
+            OnNewValue?.Invoke(value);
         }
 
         public IAwaiter<T> GetAwaiter()

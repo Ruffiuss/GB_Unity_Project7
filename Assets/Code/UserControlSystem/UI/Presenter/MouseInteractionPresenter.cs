@@ -1,6 +1,7 @@
 using Abstractions;
 using System;
 using System.Linq;
+using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UserControlSystem.UI.Model;
@@ -36,35 +37,39 @@ namespace UserControlSystem.UI.Presenter
             _groundPlane = new Plane(_groundTransform.up, 0);
         }
 
-        private void Update()
+        private void Start()
         {
-            if (!Input.GetMouseButtonUp(0) && !Input.GetMouseButton(1))
-                return;
-            if (_eventSystem.IsPointerOverGameObject())
-                return;
+            var LMBclickStream = Observable.EveryUpdate().Where(_ => Input.GetMouseButton(0) && !_eventSystem.IsPointerOverGameObject());
+            var RMBclickStream = Observable.EveryUpdate().Where(_ => Input.GetMouseButton(1) && !_eventSystem.IsPointerOverGameObject());
 
-            var hits = Physics.RaycastAll(_camera.ScreenPointToRay(Input.mousePosition));
-            var ray = _camera.ScreenPointToRay(Input.mousePosition);
+            var LMBray = LMBclickStream.Select(_ => _camera.ScreenPointToRay(Input.mousePosition));
+            var RMBray = RMBclickStream.Select(_ => _camera.ScreenPointToRay(Input.mousePosition));
 
-            if (hits.Length == 0)
-            {
-                _onChageSelection.Invoke(null);
-                return;
-            }
+            var LMBallHits = LMBray.Select(ray => Physics.RaycastAll(ray));
+            var RMBallHits = RMBray.Select(ray => (ray, Physics.RaycastAll(ray)));
 
-            if (CompareHit<ISelectable>(hits, out var selectable))
+            LMBallHits.Subscribe(hits =>
             {
-                _onChageSelection.Invoke(selectable);
-            }
+                if (CompareHit<ISelectable>(hits, out var selectable))
+                {
+                    _onChageSelection?.Invoke(selectable);
+                }
+                else
+                    _onChageSelection?.Invoke(null);
+            });
 
-            if (CompareHit<IAttackable>(hits, out var attackable))
+            RMBallHits.Subscribe(data =>
             {
-                _attackablesRMB.SetValue(attackable);
-            }
-            else if (_groundPlane.Raycast(ray, out var enter))
-            {
-                _groundClicksRMB.SetValue(ray.origin + ray.direction * enter);
-            }
+
+                if (CompareHit<IAttackable>(data.Item2, out var attackable))
+                {
+                    _attackablesRMB.SetValue(attackable);
+                }
+                else if (_groundPlane.Raycast(data.Item1, out var enter))
+                {
+                    _groundClicksRMB.SetValue((data.Item1.origin + (data.Item1.direction * enter)));
+                }
+            });
         }
 
         private void OnDestroy()

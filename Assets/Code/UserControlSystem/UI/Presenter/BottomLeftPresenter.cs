@@ -1,8 +1,10 @@
 using Abstractions;
+using System;
 using TMPro;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using UserControlSystem.UI.Model;
+using Zenject;
 
 namespace UserControlSystem.UI.Presenter
 {
@@ -15,7 +17,8 @@ namespace UserControlSystem.UI.Presenter
         [SerializeField] private Image _sliderBackground;
         [SerializeField] private Image _sliderFillImage;
         [SerializeField] private TextMeshProUGUI _text;
-        [SerializeField] private SelectableValue _selectedValue;
+
+        [Inject] private IObservable<ISelectable> _selectedValue;
 
         #endregion
 
@@ -23,8 +26,7 @@ namespace UserControlSystem.UI.Presenter
 
         private void Start()
         {
-            _selectedValue.OnNewValue += onSelected;
-            onSelected(_selectedValue.CurrentValue);
+            _selectedValue.Subscribe(onSelected);
         }
 
         #endregion
